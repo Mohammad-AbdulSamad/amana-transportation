@@ -1,7 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Bus, Menu, Users } from 'lucide-react';
-import MapComponent from '../app/components/MapComponent';
+import dynamic from "next/dynamic";
+
+// Load only on client
+const MapComponent = dynamic(() => import("../app/components/MapComponent"), {
+  ssr: false,
+});
 
 const AmanaTransportation = () => {
   const [busData, setBusData] = useState(null);
@@ -645,8 +650,12 @@ const AmanaTransportation = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+          onClick={() => {
+              if (typeof window !== "undefined") {
+                window.location.reload();
+              }
+            }}
             className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
           >
             Retry

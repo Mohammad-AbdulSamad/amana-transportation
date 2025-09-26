@@ -57,7 +57,6 @@ export default function MapComponent({ busData, selectedBusId }) {
 
   const nextStop = selectedBus.bus_stops.find((stop) => stop.is_next_stop);
 
-  
   return (
     <div className="w-full h-80 rounded-lg overflow-hidden border-2 border-gray-200">
       <MapContainer
@@ -66,13 +65,13 @@ export default function MapComponent({ busData, selectedBusId }) {
         style={{ height: "100%", width: "100%" }}
         scrollWheelZoom={true}
       >
-        {/* Light grey background tiles */}
+        {/* Carto Light tiles (free, no API key needed) */}
         <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
 
-        {/* Bus marker with hover popup */}
+        {/* Bus marker */}
         <Marker
           position={[
             selectedBus.current_location.latitude,
@@ -86,21 +85,25 @@ export default function MapComponent({ busData, selectedBusId }) {
                 Bus {selectedBus.route_number}
               </h3>
               <p className="text-sm text-red-700 mb-2">
-                <span className="font-medium">Status:</span> 
+                <span className="font-medium">Status:</span>
                 <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-1 ml-2"></span>
                 {selectedBus.status}
               </p>
               <p className="text-sm text-red-700 mb-2">
-                <span className="font-medium">Capacity:</span> {selectedBus.passengers.utilization_percentage}%
+                <span className="font-medium">Capacity:</span>{" "}
+                {selectedBus.passengers.utilization_percentage}%
               </p>
               <p className="text-sm text-red-700 mb-3">
-                <span className="font-medium">Next Stop:</span> {nextStop?.name || 'Unknown'}
+                <span className="font-medium">Next Stop:</span>{" "}
+                {nextStop?.name || "Unknown"}
               </p>
               <div className="flex items-center text-sm text-red-700">
                 <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2-2zM4 18v-4h3v-3h2l3 2h5v2h-3l-3-2h-1v3H7v4H4zm14.5-11c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5S15 12.43 15 11s1.57-3.5 3.5-3.5z"/>
                 </svg>
-                <span>{selectedBus.passengers.current}/{selectedBus.passengers.capacity} passengers</span>
+                <span>
+                  {selectedBus.passengers.current}/{selectedBus.passengers.capacity} passengers
+                </span>
               </div>
             </div>
           </Popup>
@@ -109,7 +112,10 @@ export default function MapComponent({ busData, selectedBusId }) {
         {/* Route polyline */}
         {selectedBus.bus_stops.length > 1 && (
           <Polyline
-            positions={selectedBus.bus_stops.map((stop) => [stop.latitude, stop.longitude])}
+            positions={selectedBus.bus_stops.map((stop) => [
+              stop.latitude,
+              stop.longitude,
+            ])}
             color="#10b981"
             weight={3}
             opacity={0.8}
@@ -128,7 +134,10 @@ export default function MapComponent({ busData, selectedBusId }) {
               <div className="p-3 min-w-48">
                 <h4 className="font-bold text-gray-800 mb-2">{stop.name}</h4>
                 <p className="text-sm text-gray-600">
-                  Next Arrival: <span className="font-medium text-blue-600">{stop.estimated_arrival}</span>
+                  Next Arrival:{" "}
+                  <span className="font-medium text-blue-600">
+                    {stop.estimated_arrival}
+                  </span>
                 </p>
                 {stop.is_next_stop && (
                   <p className="text-xs text-orange-600 font-medium mt-1">

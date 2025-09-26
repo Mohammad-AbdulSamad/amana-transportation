@@ -46,17 +46,18 @@ export default function MapComponent({ busData, selectedBusId }) {
     );
   }
 
-  const selectedBus = busData.bus_lines.find(bus => bus.id === selectedBusId) || busData.bus_lines[0];
-  
-  // Center map on the selected bus
+  const selectedBus =
+    busData.bus_lines.find((bus) => bus.id === selectedBusId) ||
+    busData.bus_lines[0];
+
   const center = [
     selectedBus.current_location.latitude,
     selectedBus.current_location.longitude,
   ];
 
-  // Get next stop for the selected bus
-  const nextStop = selectedBus.bus_stops.find(stop => stop.is_next_stop);
+  const nextStop = selectedBus.bus_stops.find((stop) => stop.is_next_stop);
 
+  
   return (
     <div className="w-full h-80 rounded-lg overflow-hidden border-2 border-gray-200">
       <MapContainer
